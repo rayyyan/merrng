@@ -1,0 +1,40 @@
+version: "3"
+services:
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - orders
+      - suppliers
+    network_mode: host
+  orders:
+    build:
+      context: orders
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    depends_on:
+      - redis
+      - mongo
+    network_mode: host
+  suppliers:
+    build:
+      context: suppliers
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - redis
+      - mongo
+    network_mode: host
+  redis:
+    image: "redis:7.0.4-alpine"
+    ports:
+      - "6379:6379"
+    network_mode: host
+  mongo:
+    image: "mongo:5.0.11"
+    ports:
+      - "27017:27017"
+    network_mode: host
